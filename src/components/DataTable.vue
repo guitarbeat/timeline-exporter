@@ -26,6 +26,12 @@
         <template #cell(distance)="data">
           <span v-b-tooltip.hover :title="`${data.value}`">{{ data.value | distance }}</span>
         </template>
+        <template #cell(latitude)="data">
+          <span v-b-tooltip.hover :title="`${data.value}`">{{ data.value | round(3) }}</span>
+        </template>
+        <template #cell(longitude)="data">
+          <span v-b-tooltip.hover :title="`${data.value}`">{{ data.value | round(3) }}</span>
+        </template>
       </b-table>
       <small class="text-muted">
         <i>Duration: {{ data.durationSum | duration('asHours') | round(2) }} hours</i>
@@ -109,7 +115,7 @@ export default {
         let csvItem = Object.assign({}, item)
         if (globalOptions.csvExportDatesInLocalTimezone) {
           csvItem.timeBegin = moment(item.timeBegin).format('YYYY-MM-DDTHH:mm:ss.SSS')
-          csvItem.timeEnd = moment(item.timeEnd).format('YYYY-MM-HH:mm:ss.SSS')
+          csvItem.timeEnd = moment(item.timeEnd).format('YYYY-MM-DDTHH:mm:ss.SSS')
         }
         if (globalOptions.csvExportProcessedDistance) {
           csvItem.distance = this.$options.filters.distance(item.distance, 2, true)

@@ -5,6 +5,7 @@ import moment from 'moment'
 function fetchGoogleTimelineData(from, to) {
   const fromDate = new Date(from)
   const toDate = new Date(to)
+  const name = `${moment(fromDate).format('YYYY-DD-MM')}_${moment(toDate).format('YYYY-DD-MM')}`
 
   const requests = []
   // eslint-disable-next-line no-unmodified-loop-condition
@@ -25,7 +26,7 @@ function fetchGoogleTimelineData(from, to) {
       .then(
         axios.spread((...responses) => {
           const data = {
-            name: `${moment(fromDate).format('YYYY-DD-MM')}_${moment(toDate).format('YYYY-DD-MM')}`,
+            name,
             items: []
           }
           responses.forEach(response => {
@@ -42,7 +43,9 @@ function fetchGoogleTimelineData(from, to) {
                 timeEnd: feature.properties.timespan.end,
                 duration: duration,
                 category: feature.properties.Category,
-                distance: feature.properties.Distance
+                distance: feature.properties.Distance,
+                latitude: feature.geometry.type === 'Point' ? feature.geometry.coordinates[1] : null,
+                longitude: feature.geometry.type === 'Point' ? feature.geometry.coordinates[0] : null
               })
             })
           })
